@@ -1,0 +1,1 @@
+{"1": {"depth": 1, "reg_size": 2, "max_degree": 2, "edge_size": 4}, "2": {"depth": 2, "reg_size": 2, "max_degree": 2, "edge_size": 4}, "3": {"depth": 3, "reg_size": 2, "max_degree": 2, "edge_size": 4}, "4": {"depth": 4, "reg_size": 2, "max_degree": 2, "edge_size": 4}, "node_size": 6, "min_reg_size": 2}
