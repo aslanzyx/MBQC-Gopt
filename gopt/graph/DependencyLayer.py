@@ -1,5 +1,5 @@
 from typing import Dict, Set
-from graphoptim.core.BlochSphere import BlochSphere
+from ..core import BlochSphere
 import networkx as nx
 import matplotlib.pyplot as plt
 

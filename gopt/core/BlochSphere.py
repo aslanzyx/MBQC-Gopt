@@ -1,4 +1,4 @@
-from .Utils import rotate_coordinates
+from gopt.Utils import rotate_coordinates
 from .Exceptions import BaseException
 import numpy as np
 

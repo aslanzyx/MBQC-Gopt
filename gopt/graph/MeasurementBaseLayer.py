@@ -1,6 +1,6 @@
 from typing import Dict
 
-from .BlochSphere import BlochSphere
+from gopt.core.BlochSphere import BlochSphere
 
 
 class MeasurementBaseLayer:

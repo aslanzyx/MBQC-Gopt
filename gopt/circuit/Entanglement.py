@@ -1,4 +1,4 @@
-from core.BlochSphere import BlochSphere
+from ..core import BlochSphere
 
 
 class Entanglement:

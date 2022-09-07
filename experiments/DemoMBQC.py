@@ -1,9 +1,9 @@
-from graphoptim.core import ClusterState
+from gopt.circuit import Circuit
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
 
 # Construct MBQC circuit on cluster state and implement it in unitary circuit model
-circuit = ClusterState(2)
+circuit = Circuit(2)
 circuit.h(0)
 circuit.cnot(0, 1)
 

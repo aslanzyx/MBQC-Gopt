@@ -30,7 +30,7 @@ class GeometryLayer:
         self.G.remove_node(label)
 
     def boundary_nodes(self, nodes: set[any]) -> set[any]:
-        boundary: Set[any] = set()
+        boundary: set[any] = set()
         for node in nodes:
             boundary = boundary.union(self.neighbours(node))
         return boundary
@@ -41,14 +41,14 @@ class GeometryLayer:
     def isolated(self, label):
         return len(self.neighbours(label)) == 0
 
-    def nodes(self) -> List[any]:
+    def nodes(self) -> list[any]:
         return list(self.G.nodes())
 
     def degree(self, nodes: any) -> any:
         return self.G.degree(nodes)
 
     def max_degree_nodes(self, search_set=None) -> (set[any], int):
-        nodes: Set[any] = set()
+        nodes: set[any] = set()
         max_degree: int = 0
 
         if search_set is None:
@@ -74,8 +74,8 @@ class GeometryLayer:
         """
         n: int = self.G.size()
         retval: np.ndarray = np.zeros((n, n))
-        label2idx: Dict[any, int] = dict()
-        label_reg: List[any] = list()
+        label2idx: dict[any, int] = dict()
+        label_reg: list[any] = list()
         i = 0
         for node in self.G.nodes():
             label2idx[node] = i

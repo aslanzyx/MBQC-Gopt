@@ -1,9 +1,9 @@
 from math import pi
 import networkx as nx
 
-from ..core.GraphState import GraphState
-from ..core.BlochSphere import BlochSphere
-from ..core.Utils import is_pauli_angle
+from ..graph import GraphState
+from ..Utils import is_pauli_angle
+from ..core import BlochSphere
 
 
 class Circuit:
@@ -16,8 +16,7 @@ class Circuit:
         self.cluster_stacks: list[list[float]] = [[0] for _ in range(size)]
         self.stack_ptrs: list[int] = [1] * size
         self.entanglement_edges: set[((int, int), (int, int))] = set()
-        self.corrections: list[dict[(int, int), BlochSphere]] = [
-            dict() for _ in range(size)]
+        self.corrections: list[dict[(int, int), BlochSphere]] = [dict() for _ in range(size)]
         self.dependencies: dict[(int, int), set[(int, int)]] = dict()
 
         self._finalized = False
@@ -166,7 +165,8 @@ class Circuit:
         Add output qubits
         """
         if self._finalized:
-            raise Exception("Output layer has already been added.")
+            # raise Exception("Output layer has already been added.")
+            print("Output layer has already been added.")
         else:
             for i in range(self.size):
                 # Process measurement dependencies
