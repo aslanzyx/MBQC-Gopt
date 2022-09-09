@@ -1,1 +1,1 @@
-from circuit import Circuit
+from gopt.circuit import Circuit
