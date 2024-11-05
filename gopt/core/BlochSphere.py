@@ -39,7 +39,8 @@ class BlochSphere:
         Check if the state is Pauli
         return: true if the state is Pauli
         """
-        return np.round(np.abs(np.sum(self.vector)), self._precision_digit) == 1
+        return np.round(np.abs(np.sum(self.vector)),
+                        self._precision_digit) == 1
 
     def plane(self) -> str:
         """
@@ -72,7 +73,9 @@ class BlochSphere:
 
     def angle(self, plane: str = 'xy'):
         """
-        
+        Get the measurement angle with specified measurement plane
+        plane: measurement plane
+        return: measurement angle
         """
         ax0, ax1 = plane[0], plane[1]
         ax0 = self.resolve_index(ax0)

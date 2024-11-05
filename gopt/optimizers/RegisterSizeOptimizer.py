@@ -8,6 +8,7 @@ from graphoptim.core import GeometryLayer, GraphState
 
 
 class RegisterSizeOptimizer:
+
     def __init__(self, graph_state: GraphState, max_depth: int = 100):
 
         self.optimized_idx = 0
@@ -64,18 +65,24 @@ class RegisterSizeOptimizer:
         # metadata.sort(key=lambda meta: meta[1])
 
         self.depth += 1
-        self.track.append({"depth": self.depth,
-                           "reg_size": size,
-                           "max_degree": self.current_geometry.max_degree_nodes()[1],
-                           "edge_size": len(self.current_geometry.G.edges())})
-        # print(f"reached depth {self.depth} with size {size}")
+        self.track.append({
+            "depth":
+            self.depth,
+            "reg_size":
+            size,
+            "max_degree":
+            self.current_geometry.max_degree_nodes()[1],
+            "edge_size":
+            len(self.current_geometry.G.edges())
+        })
 
         for node in lc_nodes_todo:
             self.current_geometry.local_complement(node)
             if not self.has_isomorphic():
                 # DP: record current geometry
                 self.lc_map.append((cur_id, node))
-                self.graph_traversed.append(nx.Graph.copy(self.current_geometry.G))
+                self.graph_traversed.append(
+                    nx.Graph.copy(self.current_geometry.G))
 
                 # DFS recursion
                 self.execute()

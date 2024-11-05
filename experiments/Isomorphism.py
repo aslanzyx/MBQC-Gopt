@@ -21,7 +21,8 @@ def random_circuit(angle_matrix: np.ndarray):
     parity = 0
     for i in range(0, m, 2):
         for j in range(n):
-            cluster.add_rotation_sequence(j, [angle_matrix[i, j], angle_matrix[i + 1, j]])
+            cluster.add_rotation_sequence(
+                j, [angle_matrix[i, j], angle_matrix[i + 1, j]])
         if parity:
             for j in range(1, n - 1, 2):
                 cluster.cz(j, j + 1)
@@ -35,11 +36,13 @@ def random_circuit(angle_matrix: np.ndarray):
     print(f"total number of nodes {len(graph.geometry.nodes())}")
 
     graph.eliminate_clifford()
-    # graph.draw()
-    # plt.show()
+    graph.draw()
+    plt.show()
 
     # Make first schedule
-    print(f"degree of reduced graph state {graph.geometry.max_degree_nodes()[1]}")
+    print(
+        f"degree of reduced graph state {graph.geometry.max_degree_nodes()[1]}"
+    )
     sequence, size = graph.schedule()
     # graph.schedule()
     _, degree = graph.geometry.max_degree_nodes()
@@ -50,10 +53,13 @@ def random_circuit(angle_matrix: np.ndarray):
     start_time = time.time()
     eo = EdgeOptimizerDFS(graph, max_depth=1000, rev=True)
     eo.execute()
-    print(f"optimization finished with quantum resource required {eo.min_reg_size}")
+    print(
+        f"optimization finished with quantum resource required {eo.min_reg_size}"
+    )
     print(f"optimization finished with # of edges required {eo.min_edge_size}")
     print(f"executed with time {time.time() - start_time:.2f}")
-    eo.save_track(f"benchmark/isomorphism/main_with_iso_rev_track_{m // 2}_{n}.json")
+    eo.save_track(
+        f"benchmark/isomorphism/main_with_iso_rev_track_{m // 2}_{n}.json")
 
 
 def save_angle_matrix(angles_matrix: np.ndarray, filename):
@@ -106,13 +112,10 @@ def plot_analysis(filename):
 
 n = 10
 m = 10
-filename = f"benchmark/isomorphism/main_track_{m}_{n}.json"
-filename = f"benchmark/isomorphism/main_with_iso_track_{m}_{n}.json"
-# filename = f"benchmark/isomorphism/main_with_no_iso_track_{m}_{n}.json"
 filename = f"benchmark/isomorphism/main_with_iso_rev_track_{m}_{n}.json"
 
-angle_matrix = load_angle_matrix(f"benchmark/isomorphism/angles_iso_{m}_{n}.npy")
+angle_matrix = load_angle_matrix(
+    f"benchmark/isomorphism/angles_iso_{m}_{n}.npy")
 random_circuit(angle_matrix)
 
-# plot_isomorphism_analysis(filename)
 plot_analysis(filename)

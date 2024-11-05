@@ -9,8 +9,13 @@ from graphoptim.core import GraphState
 
 # TODO: Optimize performance
 class EdgeOptimizerDFS:
-    def __init__(self, graph_state: GraphState, max_depth: int = 100,
-                 traverse_all=False, rev: bool = False, greedy=True):
+
+    def __init__(self,
+                 graph_state: GraphState,
+                 max_depth: int = 100,
+                 traverse_all=False,
+                 rev: bool = False,
+                 greedy=True):
 
         self.graph_state = graph_state
         self.current_geometry = graph_state.geometry
@@ -46,14 +51,17 @@ class EdgeOptimizerDFS:
     def lc_delta(self, node: any) -> (Dict[any, int], Set[any], int):
 
         search_set = self.current_geometry.neighbours(node)
-        delta: Dict[any, int] = {node: degree for node, degree in
-                                 self.current_geometry.nodes(search_set)}
+        delta: Dict[any, int] = {
+            node: degree
+            for node, degree in self.current_geometry.nodes(search_set)
+        }
         self.current_geometry.local_complement(node)
         for node, degree in self.current_geometry.nodes(search_set):
             delta[node] = degree - delta[node]
         self.current_geometry.local_complement(node)
 
-        return delta, self.current_geometry.max_degree_nodes(self.current_geometry.G, search_set)
+        return delta, self.current_geometry.max_degree_nodes(
+            self.current_geometry.G, search_set)
 
     def execute(self):
 
@@ -61,8 +69,10 @@ class EdgeOptimizerDFS:
             return
 
         if not self.traverse_all:
-            max_degree_nodes, max_degree = self.current_geometry.max_degree_nodes()
-            lc_nodes_todo = self.current_geometry.boundary_nodes(max_degree_nodes).union(max_degree_nodes)
+            max_degree_nodes, max_degree = self.current_geometry.max_degree_nodes(
+            )
+            lc_nodes_todo = self.current_geometry.boundary_nodes(
+                max_degree_nodes).union(max_degree_nodes)
         else:
             lc_nodes_todo = self.current_geometry.nodes()
 
@@ -85,15 +95,18 @@ class EdgeOptimizerDFS:
 
             # compute computational resource
             _, reg_size = self.graph_state.schedule()
-            degree_norm = np.linalg.norm([d for _, d in self.current_geometry.G.degree])
+            degree_norm = np.linalg.norm(
+                [d for _, d in self.current_geometry.G.degree])
             minimax_degree = self.current_geometry.max_degree_nodes()[1]
 
             # record log
-            self.track[self.depth] = {"depth": self.depth,
-                                      "reg_size": reg_size,
-                                      "max_degree": minimax_degree,
-                                      "degree_norm": degree_norm,
-                                      "edge_size": edge_size}
+            self.track[self.depth] = {
+                "depth": self.depth,
+                "reg_size": reg_size,
+                "max_degree": minimax_degree,
+                "degree_norm": degree_norm,
+                "edge_size": edge_size
+            }
 
             # update min edge size
             if edge_size < self.min_edge_size:
@@ -125,7 +138,6 @@ class EdgeOptimizerDFS:
 
         for node, _, depth in metadata:
             self.current_geometry.local_complement(node)
-            # print(f"{self.depth} reached")
             iso = self.find_isomorphic()
             self.graph_reg[depth] = nx.Graph.copy(self.current_geometry.G)
             if iso is None:
@@ -159,5 +171,11 @@ class EdgeOptimizerDFS:
             track["minimax_degree_idx"] = self.optimized_max_degree_idx
             track["min_degree_norm_idx"] = self.optimized_degree_norm_idx
 
-            track["isomorphic_track"] = {key: {idx: 0 for idx in ids} for key, ids in self.isomorphism_reg.items()}
+            track["isomorphic_track"] = {
+                key: {
+                    idx: 0
+                    for idx in ids
+                }
+                for key, ids in self.isomorphism_reg.items()
+            }
             json.dump(track, f)

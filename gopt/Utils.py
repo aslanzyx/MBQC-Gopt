@@ -2,17 +2,16 @@ from math import pi, sin, cos
 from typing import Dict, List, Set
 
 
-def rotate_coordinates(angle: float, rx: float, ry: float):
+def rotate_coordinates(angle: float, rx: float, ry: float) -> float:
     return cos(angle) * rx - sin(angle) * ry, \
            sin(angle) * rx + cos(angle) * ry
 
 
-def is_pauli_angle(angle: float):
+def is_pauli_angle(angle: float) -> bool:
     return angle % (pi / 2) == 0
 
 
-def process_outcomes(outome_counts: Dict[str, int],
-                     creg_map: Dict[any, int],
+def process_outcomes(outome_counts: Dict[str, int], creg_map: Dict[any, int],
                      outputs: List[any]):
     output_reg = [creg_map[node] for node in outputs]
     processed_counts: Dict[str, int] = dict()

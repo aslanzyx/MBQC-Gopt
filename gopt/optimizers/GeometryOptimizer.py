@@ -9,7 +9,12 @@ from graphoptim.core import GeometryLayer, GraphState
 
 # TODO: Optimize performance
 class GeometryOptimizer:
-    def __init__(self, graph_state: GraphState, max_depth: int = 100, rev=False, traverse_all=False):
+
+    def __init__(self,
+                 graph_state: GraphState,
+                 max_depth: int = 100,
+                 rev=False,
+                 traverse_all=False):
 
         self.optimized_idx = 0
         self.minimax_degree = np.inf
@@ -45,14 +50,17 @@ class GeometryOptimizer:
     def lc_delta(self, node: any) -> (Dict[any, int], Set[any], int):
 
         search_set = self.current_geometry.neighbours(node)
-        delta: Dict[any, int] = {node: degree for node, degree in
-                                 self.current_geometry.nodes(search_set)}
+        delta: Dict[any, int] = {
+            node: degree
+            for node, degree in self.current_geometry.nodes(search_set)
+        }
         self.current_geometry.local_complement(node)
         for node, degree in self.current_geometry.nodes(search_set):
             delta[node] = degree - delta[node]
         self.current_geometry.local_complement(node)
 
-        return delta, self.current_geometry.max_degree_nodes(self.current_geometry.G, search_set)
+        return delta, self.current_geometry.max_degree_nodes(
+            self.current_geometry.G, search_set)
 
     def execute(self):
         """
@@ -62,7 +70,8 @@ class GeometryOptimizer:
 
         max_degree_nodes, max_degree = self.current_geometry.max_degree_nodes()
         if not self.traverse_all:
-            lc_nodes_todo = self.current_geometry.boundary_nodes(max_degree_nodes)
+            lc_nodes_todo = self.current_geometry.boundary_nodes(
+                max_degree_nodes)
         else:
             lc_nodes_todo = list(self.current_geometry.nodes())
         cur_id = len(self.lc_map) - 1
@@ -87,20 +96,15 @@ class GeometryOptimizer:
         # metadata_more.sort(key=lambda meta: meta[1], reverse=True)
         metadata = metadata_less + metadata_more
 
-        # print(min([meta[1] for meta in metadata]))
-
         self.depth += 1
-
-        # print(f"depth {self.depth} reached "
-        #       f"degree of current graphs recorded {self.current_geometry.max_degree_nodes()[1]} "
-        #       f"reg size required {self.reg_sizes[cur_id]}")
 
         for node, _ in metadata:
             self.current_geometry.local_complement(node)
             if not self.has_isomorphic():
                 # DP: record current geometry
                 self.lc_map.append((cur_id, node))
-                self.graph_traversed.append(nx.Graph.copy(self.current_geometry.G))
+                self.graph_traversed.append(
+                    nx.Graph.copy(self.current_geometry.G))
                 reg_size = self.graph_state.schedule()[1]
                 self.min_reg_size = min(self.min_reg_size, reg_size)
                 self.reg_sizes.append(reg_size)
@@ -114,9 +118,6 @@ class GeometryOptimizer:
                     self.lc_map[isomorphic_idx] = (cur_id, node)
                     self.reg_sizes[isomorphic_idx] = reg_size
                     self.min_reg_size = min(self.min_reg_size, reg_size)
-                # print(f"Isomorphism "
-                #       f"degree of current graphs recorded {self.current_geometry.max_degree_nodes()[1]} "
-                #       f"reg size required {self.reg_sizes[cur_id]}")
 
             self.current_geometry.local_complement(node)
 

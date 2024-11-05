@@ -36,7 +36,7 @@ def general_controlled_x_rotation(angle0: float, angle1: float):
     # removal procedure
     graph.eliminate_pauli()
     graph.draw()
-    # plt.show()
+    plt.show()
 
 
 general_controlled_z_rotation(0, pi / 2)

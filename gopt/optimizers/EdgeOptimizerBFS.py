@@ -10,7 +10,12 @@ from graphoptim.core import GeometryLayer, GraphState
 
 # TODO: Optimize performance
 class EdgeOptimizerBFS:
-    def __init__(self, graph_state: GraphState, max_depth: int = 100, traverse_all=False, rev: bool = False):
+
+    def __init__(self,
+                 graph_state: GraphState,
+                 max_depth: int = 100,
+                 traverse_all=False,
+                 rev: bool = False):
 
         self.optimized_idx = 0
         self.minimax_edge_size = np.inf
@@ -48,14 +53,17 @@ class EdgeOptimizerBFS:
     def lc_delta(self, node: any) -> (Dict[any, int], Set[any], int):
 
         search_set = self.current_geometry.neighbours(node)
-        delta: Dict[any, int] = {node: degree for node, degree in
-                                 self.current_geometry.nodes(search_set)}
+        delta: Dict[any, int] = {
+            node: degree
+            for node, degree in self.current_geometry.nodes(search_set)
+        }
         self.current_geometry.local_complement(node)
         for node, degree in self.current_geometry.nodes(search_set):
             delta[node] = degree - delta[node]
         self.current_geometry.local_complement(node)
 
-        return delta, self.current_geometry.max_degree_nodes(self.current_geometry.G, search_set)
+        return delta, self.current_geometry.max_degree_nodes(
+            self.current_geometry.G, search_set)
 
     def execute(self):
         """
@@ -89,12 +97,19 @@ class EdgeOptimizerBFS:
                     metadata_more.append((node, edge_size))
                 self.depth += 1
                 _, reg_size = H.schedule()
-                self.track.append({"depth": self.depth,
-                                   "reg_size": reg_size,
-                                   "max_degree": H.geometry.max_degree_nodes()[1],
-                                   "edge_size": len(H.geometry.G.edges())})
+                self.track.append({
+                    "depth":
+                    self.depth,
+                    "reg_size":
+                    reg_size,
+                    "max_degree":
+                    H.geometry.max_degree_nodes()[1],
+                    "edge_size":
+                    len(H.geometry.G.edges())
+                })
                 self.min_reg_size = min(self.min_reg_size, reg_size)
-                self.minimax_edge_size = min(self.minimax_edge_size, len(H.geometry.G.edges()))
+                self.minimax_edge_size = min(self.minimax_edge_size,
+                                             len(H.geometry.G.edges()))
                 H.local_complement(node)
 
             metadata_less.sort(key=lambda meta: meta[1])
@@ -113,7 +128,6 @@ class EdgeOptimizerBFS:
             if len(l1_traversed_nodes) == 0:
                 l1_traversed_nodes = [node for node in l2_traversed_nodes]
                 l2_traversed_nodes = []
-            print(f"depth {self.depth} reached")
 
     def optimized_lc_sequence(self) -> List[any]:
         ptr: int = self.optimized_idx
